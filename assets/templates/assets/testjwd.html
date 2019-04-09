@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}经纬度信息查询{% endblock %}
+{% block meta %}
+<!--  <meta http-equiv="Refresh" content="5";/> 5秒刷新-->
+{% endblock %}
+{% block css %}
+
+<!-- DataTables -->
+  <link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %}">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="{% static 'dist/css/skins/_all-skins.min.css' %}">
+
+{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+      <h1>
+        实时经纬度
+        <small>list</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li class="active">经纬度数据</li>
+      </ol>
+    </section>
+    <section class="content container-fluid">
+      <div class="box box-success">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">经纬度数据表<small>(测试)</small></h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table id="assets_table" class="table table-bordered table-hover">
+            <thead>
+            <tr>
+              <th>序号</th>
+              <th>车辆名称</th>
+              <th>车辆状态</th>
+              <th>纬度</th>
+              <th>经度</th>
+              <th>更新时间</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for real in carreal %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ real.serialnum.Carname|default:"-" }}</td>
+                  <td>{{ real.get_Statevehicle_display|default:"-" }}</td>
+                  <td>{{ real.longitude|default:"-" }}</td>
+                  <td>{{ real.latitude|default:"-" }}</td>
+                  <td>{{ real.local_time|date:"Y-m-d H:i:s" }}</td>
+                </tr>
+                {% empty %}
+                  <tr>没有数据！</tr>
+                {% endfor %}
+
+            </tbody>
+            <tfoot>
+            <tr>
+              <th>序号</th>
+              <th>车辆名称</th>
+              <th>车辆状态</th>
+              <th>纬度</th>
+              <th>经度</th>
+              <th>更新时间</th>
+            </tr>
+            </tfoot>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+    </section>
+
+{% endblock %}
+
+{% block script %}
+    <!-- DataTables -->
+    <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+    <!-- SlimScroll -->
+    <script src="{% static 'plugins/slimScroll/jquery.slimscroll.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static 'plugins/fastclick/fastclick.js' %}"></script>
+    <!-- AdminLTE App -->
+    <script src="{% static 'dist/js/app.min.js' %}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{% static 'dist/js/demo.js' %}"></script>
+    <!-- page script -->
+    <script>
+      $(function () {
+        $('#assets_table').DataTable({
+          "paging": true,       <!-- 允许分页 -->
+          "lengthChange": true, <!-- 允许改变每页显示的行数 -->
+          "searching": true,    <!-- 允许内容搜索 -->
+          "ordering": true,     <!-- 允许排序 -->
+          "info": true,         <!-- 显示信息 -->
+          "autoWidth": false    <!-- 固定宽度 -->
+        });
+      });
+    </script>
+{% endblock %}
